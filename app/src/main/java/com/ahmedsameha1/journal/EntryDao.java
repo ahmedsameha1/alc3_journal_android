@@ -25,5 +25,8 @@ public interface EntryDao {
     LiveData<List<Entry>> getEntries(String email);
 
     @Query("select * from entry where id =:id")
-    LiveData<Entry> getEntryById(int id);
+    LiveData<Entry> getEntryByIdLiveData(int id);
+
+    @Query("select * from entry where id =:id")
+    Entry getEntryById(int id);
 }

@@ -1,3 +1,10 @@
+DESCRIPTION
+===========
+
+This is an android app that allows the user to write text entries.
+The user can view, add, update and delete text entries.
+This app provides authentication using Google authentication.
+
 ATTRIBUTIONS
 ============
 https://developers.google.com/identity/sign-in/android/start-integrating

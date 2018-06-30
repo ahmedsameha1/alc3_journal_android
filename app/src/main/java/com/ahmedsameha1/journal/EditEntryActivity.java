@@ -14,10 +14,11 @@ import android.widget.Toast;
 
 public class EditEntryActivity extends AppCompatActivity {
     public static final String ENTRY_ID = "entry_id";
+    private static final String CURRENT_TEXT = "current_text";
     private int entry_id;
     private AppDatabase appDatabase;
     private EditText entry_text;
-    private Entry entry;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,15 +27,19 @@ public class EditEntryActivity extends AppCompatActivity {
         entry_text = findViewById(R.id.entry_text);
         appDatabase = AppDatabase.getsInstance(this);
         FloatingActionButton fab =  findViewById(R.id.fab);
-        LiveData<Entry> liveData = appDatabase.entryDao().getEntryById(entry_id);
-        liveData.observe(this, new Observer<Entry>() {
-            @Override
-            public void onChanged(@Nullable Entry entry) {
-                if ( entry == null ) return;
-                EditEntryActivity.this.entry = entry;
-                entry_text.setText(entry.getText());
-            }
-        });
+        if ( savedInstanceState == null ) {
+            LiveData<Entry> liveData = appDatabase.entryDao().getEntryByIdLiveData(entry_id);
+            liveData.observe(this, new Observer<Entry>() {
+                @Override
+                public void onChanged(@Nullable Entry entry) {
+                    if (entry == null) return;
+
+                    entry_text.setText(entry.getText());
+                }
+            });
+        } else {
+            entry_text.setText(savedInstanceState.getString(CURRENT_TEXT));
+        }
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,6 +49,7 @@ public class EditEntryActivity extends AppCompatActivity {
                     AppExecutor.getsInstance().getExecutor().execute(new Runnable() {
                         @Override
                         public void run() {
+                            Entry entry = appDatabase.entryDao().getEntryById(entry_id);
                             entry.setText(entry_text.getText().toString());
                             appDatabase.entryDao().update(entry);
                         }
@@ -54,4 +60,9 @@ public class EditEntryActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(CURRENT_TEXT, entry_text.getText().toString());
+    }
 }
