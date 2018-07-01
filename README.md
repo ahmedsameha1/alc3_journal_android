@@ -19,3 +19,4 @@ https://stackoverflow.com/a/34193741 by: David.
 https://classroom.udacity.com/courses/ud851-africa
 https://github.com/udacity/ud851-Exercises/blob/student/Lesson09b-ToDo-List-AAC/T09b.10-Solution-AddViewModelToAddTaskActivity/app/build.gradle
 https://developer.android.com/training/constraint-layout/
+https://developers.google.com/identity/sign-in/android/disconnect
